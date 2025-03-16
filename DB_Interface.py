@@ -5,11 +5,16 @@ from keras_preprocessing.image import ImageDataGenerator
 from PIL import Image
 import numpy as np
 import tensorflow as tf
+import os
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Dataset path
-DATASET_PATH = "/Users/akashbalaji/Desktop/Projects/Waste_Management/backend/Dataset/images"  # Update this to your dataset path
+
+# Get the current directory (where main.py is)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Point to the images folder relative to the backend folder
+DATASET_PATH = os.path.join(BASE_DIR, "Dataset", "images")
 
 # Image parameters
 IMG_SIZE = 224
