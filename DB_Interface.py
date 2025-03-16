@@ -48,9 +48,9 @@ def hash_password(password: str):
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
+        host="devops-project-db.cza0amg6av33.ap-northeast-1.rds.amazonaws.com",
         port=3306,
-        user="root",
+        user="Akash",
         password="Akash003!",
         database="waste_management"
     )
