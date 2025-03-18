@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 @app.get("/test")
 async def test():
     logging.info("Test...")  # Debugging
-    return {"Test": "Working"}
+    return {"Test": "Working with jenkins"}
 
 @app.post("/login")
 async def login(request: Request):
