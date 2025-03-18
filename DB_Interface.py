@@ -1,44 +1,8 @@
 import mysql.connector
 from passlib.context import CryptContext
 from fastapi import HTTPException
-from keras_preprocessing.image import ImageDataGenerator
-from PIL import Image
-import numpy as np
-import tensorflow as tf
-import os
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-# Get the current directory (where main.py is)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Point to the images folder relative to the backend folder
-DATASET_PATH = os.path.join(BASE_DIR, "Dataset", "images")
-
-# Image parameters
-IMG_SIZE = 224
-BATCH_SIZE = 32
-
-# Data Augmentation and Preprocessing
-datagen = ImageDataGenerator(
-    rescale=1.0 / 255, 
-    rotation_range=30, 
-    width_shift_range=0.2, 
-    height_shift_range=0.2, 
-    shear_range=0.2,
-    zoom_range=0.2, 
-    horizontal_flip=True, 
-    validation_split=0.2  # 20% validation split
-)
-
-train_data = datagen.flow_from_directory(
-    DATASET_PATH,
-    target_size=(IMG_SIZE, IMG_SIZE),
-    batch_size=BATCH_SIZE,
-    class_mode="categorical",
-    subset="training"
-)
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -110,47 +74,3 @@ def register_user(user_data: dict):
     finally:
         cursor.close()
         connection.close()
-
-def predict_waste_category(image_path):
-
-    # Load the trained model
-    model = tf.keras.models.load_model("./models/waste_classifier.h5")
-
-    class_types = train_data.class_indices
-    
-    # Load and preprocess the image
-    img = Image.open(image_path).convert('RGB').resize((224, 224))
-    img_array = np.array(img) / 255.0  # Rescale
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
-    
-    # Make prediction
-    predictions = model.predict(img_array)
-    predicted_class_index = np.argmax(predictions, axis=1)[0]
-    class_labels = {v: k for k, v in class_types.items()}
-    predicted_class = class_labels[predicted_class_index]
-    
-    return predicted_class
-
-def predict_waste_categoryV2(image: Image.Image):
-
-    # Load the trained model
-    model = tf.keras.models.load_model("./models/waste_classifier.h5")
-
-    class_types = train_data.class_indices
-
-    # Preprocess the image
-    img = image.convert('RGB').resize((224, 224))
-    img_array = np.array(img) / 255.0  # Rescale
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
-    
-    # Make prediction
-    predictions = model.predict(img_array)
-    predicted_class_index = np.argmax(predictions, axis=1)[0]
-    class_labels = {v: k for k, v in class_types.items()}
-    predicted_class = class_labels[predicted_class_index]
-    
-    return predicted_class
-
-# Example usage:
-# result = predict_waste_category("./Test_images/Test_image3.png")
-# print("Predicted category:", result)
