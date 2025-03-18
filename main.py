@@ -61,7 +61,7 @@ app.add_middleware(
 def predict_waste_category(image: Image.Image):
 
     # Load the trained model
-    model = tf.keras.models.load_model(MODEL_PATH)
+    model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 
     class_types = train_data.class_indices
 
