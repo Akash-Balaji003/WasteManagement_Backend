@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from io import BytesIO
 
-from DB_Interface import login_user, register_user, predict_waste_category
+from DB_Interface import login_user, register_user
 
 app = FastAPI()
 
@@ -56,8 +56,10 @@ async def register(request: Request):
         logging.error("Error during registration: %s", str(e), exc_info=True)
         raise HTTPException(status_code=500, detail="Registration failed")
 
+'''
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     image = Image.open(BytesIO(await file.read()))
     prediction = predict_waste_category(image)
     return {"predicted_category": prediction}
+'''
