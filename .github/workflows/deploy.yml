@@ -23,8 +23,8 @@ jobs:
             pip install -r Requirements.txt  # Update dependencies if needed
             
             # Kill old uvicorn process if running
-            pkill -f "uvicorn app.main:app" || true
+            pkill -f "uvicorn main:app" || true
             
             # Restart FastAPI in the background
-            nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 > app.log 2>&1 &
+            nohup uvicorn main:app --host 0.0.0.0 --port 8000 > app.log 2>&1 &
           EOF
